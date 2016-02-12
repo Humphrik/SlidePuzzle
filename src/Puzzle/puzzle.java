@@ -123,6 +123,7 @@ public class puzzle {
 			emptyX = localX;
 			emptyY = localY;
 		}
+		checkWin();
 	}
 	public static boolean checkWin(){
 		won = false;
