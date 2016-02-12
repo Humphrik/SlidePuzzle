@@ -22,7 +22,8 @@ public class puzzle {
 	static JButton[][] buttonLayout = new JButton[4][4];
 	static boolean[][] taken = new boolean[4][4];
 	static Font font = new Font("Comic Sans MS", Font.BOLD, 36);
-
+	public boolean won;
+	public int countOfCorrects;
 	public static void main(String[] args) {
 		emptyX = 3;
 		emptyY = 3;
@@ -122,5 +123,23 @@ public class puzzle {
 			emptyX = localX;
 			emptyY = localY;
 		}
+	}
+	public static boolean checkWin(){
+		won = false;
+		countOfCorrects = 0;
+		for (int i = 0; i<=3; i++){
+			for (int o = 0; o<=3; o++){
+				if (buttonArray[i][o].getText() == buttonLayout[i][o].getText()) {
+					countOfCorrects++;
+				} 				
+			}
+		}
+		if (countOfCorrects == 16) {
+			won == true;	
+		} else {
+			won == false;
+		}
+		return won;
+	
 	}
 }
