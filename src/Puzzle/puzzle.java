@@ -126,6 +126,12 @@ public class puzzle {
 			emptyY = localY;
 		}
 		winPublic = checkWin();
+		if (winPublic) {
+			finalMethod();
+		}
+	}
+	public static void finalMethod() {
+	
 	}
 	public static boolean checkWin(){
 		won = false;
