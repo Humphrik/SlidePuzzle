@@ -23,6 +23,7 @@ public class puzzle {
 	static boolean[][] taken = new boolean[4][4];
 	static Font font = new Font("Comic Sans MS", Font.BOLD, 36);
 	public static boolean won;
+	public static boolean winPublic;
 	public static int countOfCorrects;
 	public static void main(String[] args) {
 		emptyX = 3;
@@ -72,7 +73,8 @@ public class puzzle {
 		frame.add(panel);
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
-
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public static void makeButton(JButton button, int localX, int localY, String text) {
@@ -123,7 +125,7 @@ public class puzzle {
 			emptyX = localX;
 			emptyY = localY;
 		}
-		checkWin();
+		winPublic = checkWin();
 	}
 	public static boolean checkWin(){
 		won = false;
