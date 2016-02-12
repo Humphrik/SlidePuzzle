@@ -22,8 +22,8 @@ public class puzzle {
 	static JButton[][] buttonLayout = new JButton[4][4];
 	static boolean[][] taken = new boolean[4][4];
 	static Font font = new Font("Comic Sans MS", Font.BOLD, 36);
-	public boolean won;
-	public int countOfCorrects;
+	public static boolean won;
+	public static int countOfCorrects;
 	public static void main(String[] args) {
 		emptyX = 3;
 		emptyY = 3;
@@ -135,9 +135,9 @@ public class puzzle {
 			}
 		}
 		if (countOfCorrects == 16) {
-			won == true;	
+			won = true;	
 		} else {
-			won == false;
+			won = false;
 		}
 		return won;
 	
