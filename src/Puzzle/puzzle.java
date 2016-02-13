@@ -28,7 +28,9 @@ public class puzzle {
 	static GridBagConstraints c = new GridBagConstraints(); // For organization.
 	static JButton bOne, bTwo, bThree, bFour, bFive, bSix, bSeven, bEight, bNine, bTen, bEleven, bTwelve, bThirteen,
 			bFourteen, bFifteen, bSixteen; //All 16 buttons (bSixteen is the "blank" square.)
+	static JLabel clickCounter = new JLabel("Clicks: 0"); //Label to display clicks.
 	static int emptyX, emptyY, x, y; //Used for filling in the array.
+	static int clicks = 0; //Number of clicks.
 	static JButton[][] buttonArray = new JButton[4][4]; //Temporary array.
 	static JButton[][] buttonLayout = new JButton[4][4]; //What you will see on the screen.
 	static JButton[][] solution = new JButton[4][4]; //The proper image arrangement.
@@ -36,8 +38,7 @@ public class puzzle {
 	static Font font = new Font("Comic Sans MS", Font.BOLD, 36); //Best font ever.
 	static int countOfCorrects; //For checking a winning condition.
 	static Image img; //Used for making button icons.
-	
-	static JFrame winFrame = new JFrame();
+	static JFrame winFrame = new JFrame("Very winner.");
 	static JPanel winPanel = new JPanel();
 	static JButton winPic = new JButton();
 	static JLabel winText = new JLabel("Wow. you did it."); //All of these make the winning screen.
@@ -89,6 +90,12 @@ public class puzzle {
 		makeButton(bFourteen, 3, 1, "14");
 		makeButton(bFifteen, 3, 2, "15");
 		makeButton(bSixteen, 3, 3, "XX");
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridx = 1;
+		c.gridy = 4;
+		c.ipadx = 2;
+		clickCounter.setFont(font);
+		panel.add(clickCounter, c); //Adds click counter with given permutations.
 		taken[3][3] = true; //Button 3 by 3 cannot be filled again.
 		x = 3;
 		y = 3;
@@ -189,6 +196,8 @@ public class puzzle {
 			buttonLayout[localX][localY].setBackground(Color.BLACK); //Changes new blank squares baground (left over.)
 			emptyX = localX;
 			emptyY = localY; //Variables have now been swapped.
+			clicks++; //Adds a click.
+			clickCounter.setText("Clicks: " + clicks); //Displays the new number of clicks.
 		}
 		if (checkWin()) { //If the squares are all correct...
 			for (JButton[] row : buttonLayout) {
