@@ -43,6 +43,7 @@ public class puzzle {
 	static boolean[][] taken = new boolean[4][4]; // For filling in random
 													// squares.
 	static boolean canWin = false; // For shuffling.
+	static boolean difficultySet = false;
 	static Font font = new Font("Comic Sans MS", Font.BOLD, 36); // Best font
 																	// ever.
 	static int countOfCorrects; // For checking a winning condition.
@@ -53,38 +54,13 @@ public class puzzle {
 	static JLabel winText = new JLabel("Wow. you did it."); // All of these make
 															// the winning
 															// screen.
+	static JFrame difficultyFrame = new JFrame("Please select a difficulty");
+	static JPanel difficultyPanel = new JPanel(new GridBagLayout());
+	static JButton easy, medium, hard; // The difficulty settings.
 
 	public static void main(String[] args) {
-		emptyX = 3;
-		emptyY = 3;
-		// Makes 3,3 the blank square.
-		setDisplay(); // see seeDisplay().
-		frame.setFocusable(true); // Allows for the use of the key listener
-									// (sometimes.)
-		frame.addKeyListener(new KeyListener() { // Allows one to cheat by
-													// pressing d (only works
-													// sometimes.)
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyChar() == 'd') {
-					System.out.println("You win");
-					finalMethod();
-				} else {
-					System.out.println("nope");
-				}
-
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		System.out.println("Keylistener made");
+		setDifficulty();
+		// NOTE: SEE MAKEDIFFICULTYBUTTON() FOR THE PROPER STARTUP.
 	}
 
 	public static void setDisplay() { // Makes and adds all the buttons.
@@ -104,7 +80,9 @@ public class puzzle {
 		makeButton(bThirteen, 3, 0, "13");
 		makeButton(bFourteen, 3, 1, "14");
 		makeButton(bFifteen, 3, 2, "15");
-		makeButton(bSixteen, 3, 3, "XX");
+		makeButton(bSixteen, 3, 3, "XX"); // Note that i messed up the calling
+											// of these methods. The localX and
+											// localY are now REVERSED.
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 1;
 		c.gridy = 4;
@@ -317,6 +295,7 @@ public class puzzle {
 		winFrame.add(winPanel); // Adds panel to frame.
 		winFrame.setSize(1000, 1000);
 		winFrame.setVisible(true); // Frame is set up.
+		winFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		changeColor(); // Picks a random background color.
 		winPic.addActionListener(new ActionListener() { // Whenever the picture
 														// is pressed....
@@ -371,7 +350,7 @@ public class puzzle {
 		}
 	}
 
-	public static void shuffleBoard() {
+	public static void shuffleBoard() { // Rearranges squares on the board.
 		canWin = false; // To prevent winning before even starting.
 		for (int i = 0; i <= difficulty; i++) { // Tries to make up to 3200
 												// slides.
@@ -384,5 +363,49 @@ public class puzzle {
 		canWin = true; // Player can now win.
 		clicks = 0;
 		clickCounter.setText("Clicks: 0"); // Resets the clicks and counter.
+	}
+
+	public static void setDifficulty() { // Starting window to select
+											// difficulty.
+		makeDifficultyButton(easy, 0, 0, 400, "Easy");
+		makeDifficultyButton(medium, 1, 0, 800, "Medium");
+		makeDifficultyButton(hard, 2, 0, 3200, "Hard"); // Difficulty buttons
+														// made.
+		difficultyFrame.add(difficultyPanel);
+		difficultyFrame.setSize(750, 250);
+		difficultyFrame.setResizable(false);
+		difficultyFrame.setVisible(true); // Frame set up.
+		difficultyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	}
+
+	public static void makeDifficultyButton(JButton button, int localX, int localY, int shuffles, String text) { // Makes
+																													// the
+																													// difficulty
+																													// buttons.
+		button = new JButton(text); // Initializes the button.
+		button.setFont(font); // Comic Sans.
+		button.setMinimumSize(new Dimension(100, 50));
+		JButton mybutton = button;
+		mybutton.addActionListener(new ActionListener() { // STARTS THE GAME
+															// WHEN PRESSED.
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				difficulty = shuffles; // Sets number of shuffles before the
+										// game starts.
+				difficultySet = true;
+				emptyX = 3;
+				emptyY = 3;
+				setDisplay(); // Previously in main method.
+				difficultyFrame.dispose();
+			}
+		});
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = localX;
+		c.gridy = localY;
+		c.ipadx = 100;
+		c.ipady = 50;
+		c.insets = new Insets(5, 5, 5, 5);
+		difficultyPanel.add(button, c); //Adds the button with above constraints.
 	}
 }
