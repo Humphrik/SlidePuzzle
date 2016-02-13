@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class puzzle {
 	static JFrame frame = new JFrame("Puzzle");
@@ -30,10 +31,16 @@ public class puzzle {
 	static int emptyX, emptyY, x, y;
 	static JButton[][] buttonArray = new JButton[4][4];
 	static JButton[][] buttonLayout = new JButton[4][4];
+	static JButton[][] solution = new JButton[4][4];
 	static boolean[][] taken = new boolean[4][4];
 	static Font font = new Font("Comic Sans MS", Font.BOLD, 36);
-	public static int countOfCorrects;
-	public static Image img;
+	static int countOfCorrects;
+	static Image img;
+	static boolean tempColor;
+	static JFrame winFrame = new JFrame();
+	static JPanel winPanel = new JPanel();
+	static JButton winPic = new JButton();
+	static JLabel winText = new JLabel("Wow. you did it.");
 
 	public static void main(String[] args) {
 		emptyX = 3;
@@ -62,6 +69,7 @@ public class puzzle {
 			}
 		});
 		System.out.println("Keylistener made");
+		finalMethod();
 	}
 
 	public static void setDisplay() {
@@ -114,18 +122,31 @@ public class puzzle {
 		button = new JButton();
 		button.setFont(font);
 		button.setMinimumSize(new Dimension(100, 100));
-		if (!text.equals("XX")) {
+		Icon localIcon = null;
+		if (text.equals("XX")) {
+			try {
+				img = ImageIO.read(puzzle.class.getResource("Blank.jpg"));
+			} catch (IOException ex) {
+			}
+			localIcon = new ImageIcon(img.getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+			button.setIcon(localIcon);
+		}
+		else{
 			// button.setMargin(new Insets(0,0,0,0));
 			try {
 				img = ImageIO.read(puzzle.class.getResource("Doge" + text + ".jpg"));
-				Icon localIcon = new ImageIcon(img.getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+				localIcon = new ImageIcon(img.getScaledInstance(200, 200, Image.SCALE_DEFAULT));
 				button.setIcon(localIcon);
 			} catch (IOException ex) {
 			}
+			
 
 		}
+		JButton solutionButton = new JButton();
 		JButton localButton = button;
-		buttonArray[localX][localY] = button;
+		solutionButton.setIcon(localIcon);
+		buttonArray[localY][localX] = button;
+		solution[localY][localX] = solutionButton;
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int resultX = 0;
@@ -151,7 +172,7 @@ public class puzzle {
 		c.gridy = localY;
 		c.ipadx = 100;
 		c.ipady = 100;
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(5, 5, 5, 5);
 		buttonLayout[localX][localY] = button;
 		panel.add(buttonLayout[localX][localY], c);
 
@@ -161,50 +182,66 @@ public class puzzle {
 
 		if (Math.abs(localX - emptyX) == 1 && Math.abs(localY - emptyY) == 0
 				|| Math.abs(localX - emptyX) == 0 && Math.abs(localY - emptyY) == 1) {
-			Icon localIcon = new ImageIcon(img);
 			buttonLayout[emptyX][emptyY].setText(buttonLayout[localX][localY].getText());
 			buttonLayout[emptyX][emptyY].setBackground(null);
+			Icon localIcon = buttonLayout[emptyX][emptyY].getIcon();
 			buttonLayout[emptyX][emptyY].setIcon(buttonLayout[localX][localY].getIcon());
-			buttonLayout[localX][localY].setIcon(null);
-			buttonLayout[localX][localY].setText("X");
+			buttonLayout[localX][localY].setIcon(localIcon);
+			//buttonLayout[localX][localY].setText("X");
 			buttonLayout[localX][localY].setBackground(Color.BLACK);
 			emptyX = localX;
 			emptyY = localY;
+			panel.revalidate();
 		}
 		if (checkWin()) {
+			for (JButton[] row : buttonLayout) {
+				for (JButton j : row) {
+					j.setEnabled(false);
+				}
+			}
 			finalMethod();
 		}
 	}
 
 	public static void finalMethod() {
 		System.out.println("WOOO");
-		JFrame winFrame = new JFrame();
-		JPanel winPanel = new JPanel();
-		JLabel winLabel = new JLabel();
-		winLabel.setMinimumSize(new Dimension(500,500));
+		winPic.setPreferredSize(new Dimension(900, 900));
 
 		try {
 			Image winImage = ImageIO.read(puzzle.class.getResource("DogeComplete.jpg"));
-			Icon winIcon = new ImageIcon(img.getScaledInstance(400, 400, Image.SCALE_DEFAULT));
-			winLabel.setIcon(winIcon);
+			Icon winIcon = new ImageIcon(winImage.getScaledInstance(1000, 1000, Image.SCALE_DEFAULT));
+			winPic.setIcon(winIcon);
 		} catch (IOException ex) {
 		}
-		winPanel.add(winLabel);
+		winPanel.add(winPic);
+		winPanel.add(winText);
 		winFrame.add(winPanel);
 		winFrame.setSize(1000, 1000);
 		winFrame.setVisible(true);
+		changeColor();
+		winPic.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeColor();
+				
+			}});
 
 	}
 
 	public static boolean checkWin() {
 		countOfCorrects = 0;
+		System.out.println(buttonArray[3][3].getIcon());
+		System.out.println(buttonLayout[3][3].getIcon());
 		for (int i = 0; i <= 3; i++) {
 			for (int o = 0; o <= 3; o++) {
-				if (buttonArray[i][o].getIcon() == buttonLayout[i][o].getIcon()) {
+				if (solution[i][o].getIcon().equals(buttonLayout[i][o].getIcon())) {
+					System.out.println(i + " by " + o + "  is correct" );
 					countOfCorrects++;
 				}
 			}
 		}
+		System.out.println(countOfCorrects);
 		if (countOfCorrects == 16) {
 			return true;
 		} else {
@@ -212,4 +249,21 @@ public class puzzle {
 		}
 
 	}
+	public static void changeColor(){
+		double randNum = Math.random();
+			if (randNum < .16) {
+				winPanel.setBackground(Color.RED);
+			} else if (randNum >= .16 && randNum < .32) {
+				winPanel.setBackground(Color.ORANGE);
+			} else if (randNum >= .32 && randNum < .48) {
+				winPanel.setBackground(Color.YELLOW);
+			} else if (randNum >= .48 && randNum < .56) {
+				winPanel.setBackground(Color.GREEN);
+			} else if (randNum >= .56 && randNum < .74) {
+				winPanel.setBackground(Color.BLUE);
+			} else {
+				winPanel.setBackground(Color.MAGENTA);
+			}
+	}
+
 }
