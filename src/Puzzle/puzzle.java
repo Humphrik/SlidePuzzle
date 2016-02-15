@@ -48,6 +48,7 @@ public class puzzle {
 																	// ever.
 	static int countOfCorrects; // For checking a winning condition.
 	static Image img; // Used for making button icons.
+	static String imagePath = "DogePic\\Doge"; //Allows for other images to be used.
 	static JFrame winFrame = new JFrame("Very winner.");
 	static JPanel winPanel = new JPanel();
 	static JButton winPic = new JButton();
@@ -148,7 +149,7 @@ public class puzzle {
 			button.setIcon(localIcon); // Adds icon to the blank square.
 		} else { // When making any other button.
 			try {
-				img = ImageIO.read(puzzle.class.getResource("Doge" + text + ".jpg")); // The
+				img = ImageIO.read(puzzle.class.getResource(imagePath + text + ".jpg")); // The
 																						// respective
 																						// image
 																						// block.
@@ -281,7 +282,7 @@ public class puzzle {
 		winPic.setPreferredSize(new Dimension(900, 900)); // Resizes winPic.
 
 		try {
-			Image winImage = ImageIO.read(puzzle.class.getResource("DogeComplete.jpg")); // The
+			Image winImage = ImageIO.read(puzzle.class.getResource(imagePath + "Complete.jpg")); // The
 																							// completed
 																							// image.
 			Icon winIcon = new ImageIcon(winImage.getScaledInstance(1000, 1000, Image.SCALE_DEFAULT)); // Scales
