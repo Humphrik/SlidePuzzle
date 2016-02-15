@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -48,7 +49,8 @@ public class puzzle {
 																	// ever.
 	static int countOfCorrects; // For checking a winning condition.
 	static Image img; // Used for making button icons.
-	static String imagePath = "DogePic\\Doge"; //Allows for other images to be used.
+	static String imagePath = "Gandalf"; //Allows for other images to be used.
+	static String imageType = ".gif";
 	static JFrame winFrame = new JFrame("Very winner.");
 	static JPanel winPanel = new JPanel();
 	static JButton winPic = new JButton();
@@ -60,6 +62,14 @@ public class puzzle {
 	static JButton easy, medium, hard; // The difficulty settings.
 
 	public static void main(String[] args) {
+		double i = Math.random();
+		if(i>=0.5){
+			imagePath = "Doge";
+			imageType = ".jpg";
+		}else if(i<0.5){
+			imagePath = "Gandalf";
+			imageType = ".gif";
+		}
 		setDifficulty();
 		// NOTE: SEE MAKEDIFFICULTYBUTTON() FOR THE PROPER STARTUP.
 	}
@@ -149,7 +159,7 @@ public class puzzle {
 			button.setIcon(localIcon); // Adds icon to the blank square.
 		} else { // When making any other button.
 			try {
-				img = ImageIO.read(puzzle.class.getResource(imagePath + text + ".jpg")); // The
+				img = ImageIO.read(puzzle.class.getResource(imagePath +  "Pic\\" + imagePath + text + ".jpg")); // The
 																						// respective
 																						// image
 																						// block.
@@ -282,15 +292,24 @@ public class puzzle {
 		winPic.setPreferredSize(new Dimension(900, 900)); // Resizes winPic.
 
 		try {
-			Image winImage = ImageIO.read(puzzle.class.getResource(imagePath + "Complete.jpg")); // The
+			if (imageType.equals(".jpg")){
+			Image winImage = ImageIO.read(puzzle.class.getResource(imagePath + "Pic\\" + imagePath + "Complete.jpg")); // The
 																							// completed
-																							// image.
 			Icon winIcon = new ImageIcon(winImage.getScaledInstance(1000, 1000, Image.SCALE_DEFAULT)); // Scales
-																										// the
-																										// image.
+			// the
+			// image.
 			winPic.setIcon(winIcon); // Sets button's icon to completed image.
+			}
+			else if (imageType.equals(".gif")){
+				URL url = new URL("https://i.imgur.com/dpoLK.gif");
+				Icon winIcon = new ImageIcon(url);
+				winPic.setIcon(winIcon);
+			}
+			
+			
 		} catch (IOException ex) {
 		}
+		winPic.setBackground(Color.RED);
 		winPanel.add(winPic); // Adds picture button to panel.
 		winPanel.add(winText); // Adds text label to panel.
 		winFrame.add(winPanel); // Adds panel to frame.
@@ -338,16 +357,22 @@ public class puzzle {
 										// color is picked.
 		if (randNum < .16) {
 			winPanel.setBackground(Color.RED);
+			winPic.setBackground(Color.RED);
 		} else if (randNum >= .16 && randNum < .32) {
 			winPanel.setBackground(Color.ORANGE);
+			winPic.setBackground(Color.ORANGE);
 		} else if (randNum >= .32 && randNum < .48) {
 			winPanel.setBackground(Color.YELLOW);
+			winPic.setBackground(Color.YELLOW);
 		} else if (randNum >= .48 && randNum < .56) {
 			winPanel.setBackground(Color.GREEN);
+			winPic.setBackground(Color.GREEN);
 		} else if (randNum >= .56 && randNum < .74) {
 			winPanel.setBackground(Color.BLUE);
+			winPic.setBackground(Color.BLUE);
 		} else {
 			winPanel.setBackground(Color.MAGENTA);
+			winPic.setBackground(Color.MAGENTA);
 		}
 	}
 
