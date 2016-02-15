@@ -64,14 +64,18 @@ public class puzzle {
 
 	public static void main(String[] args) {
 		double i = Math.random();
-		if(i>=0.5){
+		if(i<=0.33){
 			imagePath = "Doge";
 			imageType = ".jpg";
 			winQuote = "Wow. You did it.";
-		}else if(i<0.5){
+		}else if(i>0.33 && i<=0.67){
 			imagePath = "Gandalf";
 			imageType = ".gif";
 			winQuote = "Hehehehehehehehehehe...";
+		}else if(i>0.67){
+			imagePath = "Illuminati";
+			imageType = ".jpg";
+			winQuote = "    ...Confirmed?    ";
 		}
 		setDifficulty();
 		// NOTE: SEE MAKEDIFFICULTYBUTTON() FOR THE PROPER STARTUP.
@@ -162,6 +166,7 @@ public class puzzle {
 			button.setIcon(localIcon); // Adds icon to the blank square.
 		} else { // When making any other button.
 			try {
+				//System.out.println(text);
 				img = ImageIO.read(puzzle.class.getResource(imagePath +  "Pic\\" + imagePath + text + ".jpg")); // The
 																						// respective
 																						// image
@@ -320,6 +325,7 @@ public class puzzle {
 		winFrame.setSize(1000, 1000);
 		winFrame.setVisible(true); // Frame is set up.
 		winFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		winFrame.setResizable(false);
 		changeColor(); // Picks a random background color.
 		winPic.addActionListener(new ActionListener() { // Whenever the picture
 														// is pressed....
