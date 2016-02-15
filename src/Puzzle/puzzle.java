@@ -9,8 +9,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URL;
 
@@ -18,10 +16,10 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class puzzle {
 	static JFrame frame = new JFrame("Puzzle"); // The main window.
@@ -49,34 +47,23 @@ public class puzzle {
 																	// ever.
 	static int countOfCorrects; // For checking a winning condition.
 	static Image img; // Used for making button icons.
-	static String imagePath = "Gandalf"; //Allows for other images to be used.
+	static String imagePath = "Gandalf"; // Allows for other images to be used.
 	static String imageType = ".gif";
 	static JFrame winFrame = new JFrame("Very winner.");
 	static JPanel winPanel = new JPanel();
 	static JButton winPic = new JButton();
 	static String winQuote = "";
 	static JLabel winText = new JLabel(); // All of these make
-															// the winning
-															// screen.
+											// the winning
+											// screen.
 	static JFrame difficultyFrame = new JFrame("Please select a difficulty");
 	static JPanel difficultyPanel = new JPanel(new GridBagLayout());
 	static JButton easy, medium, hard; // The difficulty settings.
+	static JComboBox<String> picSettings;
+	static String[] picSelection = { "Doge", "Gandalf", "Illuminati", "Random" };
+	static int index;
 
 	public static void main(String[] args) {
-		double i = Math.random();
-		if(i<=0.33){
-			imagePath = "Doge";
-			imageType = ".jpg";
-			winQuote = "Wow. You did it.";
-		}else if(i>0.33 && i<=0.67){
-			imagePath = "Gandalf";
-			imageType = ".gif";
-			winQuote = "Hehehehehehehehehehe...";
-		}else if(i>0.67){
-			imagePath = "Illuminati";
-			imageType = ".jpg";
-			winQuote = "    ...Confirmed?    ";
-		}
 		setDifficulty();
 		// NOTE: SEE MAKEDIFFICULTYBUTTON() FOR THE PROPER STARTUP.
 	}
@@ -166,11 +153,11 @@ public class puzzle {
 			button.setIcon(localIcon); // Adds icon to the blank square.
 		} else { // When making any other button.
 			try {
-				//System.out.println(text);
-				img = ImageIO.read(puzzle.class.getResource(imagePath +  "Pic\\" + imagePath + text + ".jpg")); // The
-																						// respective
-																						// image
-																						// block.
+				// System.out.println(text);
+				img = ImageIO.read(puzzle.class.getResource(imagePath + "Pic\\" + imagePath + text + ".jpg")); // The
+				// respective
+				// image
+				// block.
 				localIcon = new ImageIcon(img.getScaledInstance(200, 200, Image.SCALE_DEFAULT)); // Scales
 																									// the
 																									// image.
@@ -296,25 +283,25 @@ public class puzzle {
 	}
 
 	public static void finalMethod() { // Displays the victory window.
-		//System.out.println("WOOO");
+		// System.out.println("WOOO");
 		winPic.setPreferredSize(new Dimension(900, 900)); // Resizes winPic.
 
 		try {
-			if (imageType.equals(".jpg")){
-			Image winImage = ImageIO.read(puzzle.class.getResource(imagePath + "Pic\\" + imagePath + "Complete.jpg")); // The
-																							// completed
-			Icon winIcon = new ImageIcon(winImage.getScaledInstance(1000, 1000, Image.SCALE_DEFAULT)); // Scales
-			// the
-			// image.
-			winPic.setIcon(winIcon); // Sets button's icon to completed image.
-			}
-			else if (imageType.equals(".gif")){
+			if (imageType.equals(".jpg")) {
+				Image winImage = ImageIO
+						.read(puzzle.class.getResource(imagePath + "Pic\\" + imagePath + "Complete.jpg")); // The
+				// completed
+				Icon winIcon = new ImageIcon(winImage.getScaledInstance(1000, 1000, Image.SCALE_DEFAULT)); // Scales
+				// the
+				// image.
+				winPic.setIcon(winIcon); // Sets button's icon to completed
+											// image.
+			} else if (imageType.equals(".gif")) {
 				URL url = new URL("https://i.imgur.com/dpoLK.gif");
 				Icon winIcon = new ImageIcon(url);
 				winPic.setIcon(winIcon);
 			}
-			
-			
+
 		} catch (IOException ex) {
 		}
 		winPic.setBackground(Color.RED);
@@ -407,12 +394,24 @@ public class puzzle {
 		makeDifficultyButton(medium, 1, 0, 800, "Medium");
 		makeDifficultyButton(hard, 2, 0, 3200, "Hard"); // Difficulty buttons
 														// made.
+		picSettings = new JComboBox<String>(picSelection);
+		picSettings.setSelectedIndex(3);
+		picSettings.setFont(font);
+		picSettings.setMinimumSize(new Dimension(300,50));
 		difficultyFrame.add(difficultyPanel);
-		difficultyFrame.setSize(750, 250);
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 3;
+		//picSettings.addActionListener(new ActionListener(){    public void actionPerformed(ActionEvent e) {
+			
+		//}});
+		difficultyPanel.add(picSettings,c);
+		c.gridwidth = 1;
+		difficultyFrame.setSize(750, 400);
 		difficultyFrame.setResizable(false);
 		difficultyFrame.setVisible(true); // Frame set up.
 		difficultyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
 
 	public static void makeDifficultyButton(JButton button, int localX, int localY, int shuffles, String text) { // Makes
@@ -427,11 +426,33 @@ public class puzzle {
 															// WHEN PRESSED.
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if (picSettings.getSelectedIndex() == 3) { //Random selection.
+					index = (int) (Math.random() * 3.99);
+				} else {
+					index = picSettings.getSelectedIndex(); //Specific image.
+				}
+				System.out.println(picSettings.getSelectedIndex());
+				System.out.println();
 				difficulty = shuffles; // Sets number of shuffles before the
 										// game starts.
 				difficultySet = true;
 				emptyX = 3;
 				emptyY = 3;
+				
+				if (index == 0) {
+					imagePath = "Doge";
+					imageType = ".jpg";
+					winQuote = "Wow. You did it.";
+				} else if (index == 1) {
+					imagePath = "Gandalf";
+					imageType = ".gif";
+					winQuote = "Hehehehehehehehehehe...";
+				} else if (index == 2) {
+					imagePath = "Illuminati";
+					imageType = ".jpg";
+					winQuote = "    ...Confirmed?    ";
+				} //Image is set
+				
 				setDisplay(); // Previously in main method.
 				difficultyFrame.dispose();
 			}
@@ -442,6 +463,8 @@ public class puzzle {
 		c.ipadx = 100;
 		c.ipady = 50;
 		c.insets = new Insets(5, 5, 5, 5);
-		difficultyPanel.add(button, c); //Adds the button with above constraints.
+		difficultyPanel.add(button, c); // Adds the button with above
+										// constraints.
 	}
+
 }
