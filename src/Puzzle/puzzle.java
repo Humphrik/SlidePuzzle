@@ -54,7 +54,8 @@ public class puzzle {
 	static JFrame winFrame = new JFrame("Very winner.");
 	static JPanel winPanel = new JPanel();
 	static JButton winPic = new JButton();
-	static JLabel winText = new JLabel("Wow. you did it."); // All of these make
+	static String winQuote = "";
+	static JLabel winText = new JLabel(); // All of these make
 															// the winning
 															// screen.
 	static JFrame difficultyFrame = new JFrame("Please select a difficulty");
@@ -66,9 +67,11 @@ public class puzzle {
 		if(i>=0.5){
 			imagePath = "Doge";
 			imageType = ".jpg";
+			winQuote = "Wow. You did it.";
 		}else if(i<0.5){
 			imagePath = "Gandalf";
 			imageType = ".gif";
+			winQuote = "Hehehehehehehehehehe...";
 		}
 		setDifficulty();
 		// NOTE: SEE MAKEDIFFICULTYBUTTON() FOR THE PROPER STARTUP.
@@ -288,7 +291,7 @@ public class puzzle {
 	}
 
 	public static void finalMethod() { // Displays the victory window.
-		System.out.println("WOOO");
+		//System.out.println("WOOO");
 		winPic.setPreferredSize(new Dimension(900, 900)); // Resizes winPic.
 
 		try {
@@ -310,6 +313,7 @@ public class puzzle {
 		} catch (IOException ex) {
 		}
 		winPic.setBackground(Color.RED);
+		winText.setText(winQuote);
 		winPanel.add(winPic); // Adds picture button to panel.
 		winPanel.add(winText); // Adds text label to panel.
 		winFrame.add(winPanel); // Adds panel to frame.
