@@ -59,6 +59,7 @@ public class puzzle {
 	static JFrame difficultyFrame = new JFrame("Please select a difficulty");
 	static JPanel difficultyPanel = new JPanel(new GridBagLayout());
 	static JButton easy, medium, hard; // The difficulty settings.
+	static JLabel displayImage = new JLabel();
 	static JComboBox<String> picSettings;
 	static String[] picSelection = { "Doge", "Gandalf", "Illuminati", "Random" };
 	static int index;
@@ -394,21 +395,61 @@ public class puzzle {
 		makeDifficultyButton(medium, 1, 0, 800, "Medium");
 		makeDifficultyButton(hard, 2, 0, 3200, "Hard"); // Difficulty buttons
 														// made.
+		try {
+			Image selectImage = ImageIO.read(puzzle.class.getResource("QuestionMark.jpg"));
+			Icon selectIcon = new ImageIcon(selectImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+			displayImage.setIcon(selectIcon);
+		} catch (IOException e1) {
+		}
 		picSettings = new JComboBox<String>(picSelection);
 		picSettings.setSelectedIndex(3);
 		picSettings.setFont(font);
-		picSettings.setMinimumSize(new Dimension(300,50));
-		difficultyFrame.add(difficultyPanel);
+		picSettings.setMinimumSize(new Dimension(300, 50));
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 2;
 		c.gridwidth = 3;
-		//picSettings.addActionListener(new ActionListener(){    public void actionPerformed(ActionEvent e) {
-			
-		//}});
-		difficultyPanel.add(picSettings,c);
+		c.insets = new Insets(5, 100, 5, 5);
+		difficultyPanel.add(displayImage, c);
+		picSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (picSettings.getSelectedIndex() == 0) {
+					try {
+						Image selectImage = ImageIO.read(puzzle.class.getResource("DogePic\\DogeComplete.jpg"));
+						Icon selectIcon = new ImageIcon(selectImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+						displayImage.setIcon(selectIcon);
+					} catch (IOException e1) {
+					}
+				} else if (picSettings.getSelectedIndex() == 1) {
+					try {
+						Image selectImage = ImageIO.read(puzzle.class.getResource("GandalfPic\\GandalfComplete.gif"));
+						Icon selectIcon = new ImageIcon(selectImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+						displayImage.setIcon(selectIcon);
+					} catch (IOException e1) {
+					}
+				} else if (picSettings.getSelectedIndex() == 2) {
+					try {
+						Image selectImage = ImageIO.read(puzzle.class.getResource("IlluminatiPic\\IlluminatiComplete.jpg"));
+						Icon selectIcon = new ImageIcon(selectImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+						displayImage.setIcon(selectIcon);
+					} catch (IOException e1) {
+					}
+				} else {
+					try {
+						Image selectImage = ImageIO.read(puzzle.class.getResource("QuestionMark.jpg"));
+						Icon selectIcon = new ImageIcon(selectImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+						displayImage.setIcon(selectIcon);
+					} catch (IOException e1) {
+					}
+				}
+			}
+		});
+		c.gridy = 1;
+		c.insets = new Insets(5, 5, 5, 5);
+		difficultyPanel.add(picSettings, c); // Adds the combo box.
 		c.gridwidth = 1;
-		difficultyFrame.setSize(750, 400);
+		difficultyFrame.add(difficultyPanel);
+		difficultyFrame.setSize(750, 750);
 		difficultyFrame.setResizable(false);
 		difficultyFrame.setVisible(true); // Frame set up.
 		difficultyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -426,10 +467,10 @@ public class puzzle {
 															// WHEN PRESSED.
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (picSettings.getSelectedIndex() == 3) { //Random selection.
+				if (picSettings.getSelectedIndex() == 3) { // Random selection.
 					index = (int) (Math.random() * 3.99);
 				} else {
-					index = picSettings.getSelectedIndex(); //Specific image.
+					index = picSettings.getSelectedIndex(); // Specific image.
 				}
 				System.out.println(picSettings.getSelectedIndex());
 				System.out.println();
@@ -438,7 +479,7 @@ public class puzzle {
 				difficultySet = true;
 				emptyX = 3;
 				emptyY = 3;
-				
+
 				if (index == 0) {
 					imagePath = "Doge";
 					imageType = ".jpg";
@@ -451,8 +492,8 @@ public class puzzle {
 					imagePath = "Illuminati";
 					imageType = ".jpg";
 					winQuote = "    ...Confirmed?    ";
-				} //Image is set
-				
+				} // Image is set
+
 				setDisplay(); // Previously in main method.
 				difficultyFrame.dispose();
 			}
