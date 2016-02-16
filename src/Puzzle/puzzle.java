@@ -72,23 +72,21 @@ public class puzzle {
 	public static void setDisplay() { // Makes and adds all the buttons.
 										// Essential sets the game up.
 		makeButton(bOne, 0, 0, "01");
-		makeButton(bTwo, 0, 1, "02");
-		makeButton(bThree, 0, 2, "03");
-		makeButton(bFour, 0, 3, "04");
-		makeButton(bFive, 1, 0, "05");
+		makeButton(bTwo, 1, 0, "02");
+		makeButton(bThree, 2, 0, "03");
+		makeButton(bFour, 3, 0, "04");
+		makeButton(bFive, 0, 1, "05");
 		makeButton(bSix, 1, 1, "06");
-		makeButton(bSeven, 1, 2, "07");
-		makeButton(bEight, 1, 3, "08");
-		makeButton(bNine, 2, 0, "09");
-		makeButton(bTen, 2, 1, "10");
+		makeButton(bSeven, 2, 1, "07");
+		makeButton(bEight, 3, 1, "08");
+		makeButton(bNine, 0, 2, "09");
+		makeButton(bTen, 1, 2, "10");
 		makeButton(bEleven, 2, 2, "11");
-		makeButton(bTwelve, 2, 3, "12");
-		makeButton(bThirteen, 3, 0, "13");
-		makeButton(bFourteen, 3, 1, "14");
-		makeButton(bFifteen, 3, 2, "15");
-		makeButton(bSixteen, 3, 3, "XX"); // Note that i messed up the calling
-											// of these methods. The localX and
-											// localY are now REVERSED.
+		makeButton(bTwelve, 3, 2, "12");
+		makeButton(bThirteen, 0, 3, "13");
+		makeButton(bFourteen, 1, 3, "14");
+		makeButton(bFifteen, 2, 3, "15");
+		makeButton(bSixteen, 3, 3, "XX"); //Sliding Squares made.
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 1;
 		c.gridy = 4;
@@ -173,9 +171,9 @@ public class puzzle {
 		JButton localButton = button; // local instance of the very same button.
 		solutionButton.setIcon(localIcon); // Solution button receives the same
 											// icon as the button.
-		buttonArray[localY][localX] = button; // Adds the button to the array to
+		buttonArray[localX][localY] = button; // Adds the button to the array to
 												// be used for later.
-		solution[localY][localX] = solutionButton; // Adds the solution button
+		solution[localX][localY] = solutionButton; // Adds the solution button
 													// to the "correct" array.
 		button.addActionListener(new ActionListener() { // Runs specific code
 														// when pressed.
@@ -202,7 +200,7 @@ public class puzzle {
 				shiftPiece(resultX, resultY); // Swaps the piece (if possible).
 			}
 		});
-		addButton(button, localY, localX);
+		addButton(button, localX, localY);
 	}
 
 	public static void addButton(JButton button, int localX, int localY) { // Actually
@@ -429,7 +427,8 @@ public class puzzle {
 					}
 				} else if (picSettings.getSelectedIndex() == 2) {
 					try {
-						Image selectImage = ImageIO.read(puzzle.class.getResource("IlluminatiPic\\IlluminatiComplete.jpg"));
+						Image selectImage = ImageIO
+								.read(puzzle.class.getResource("IlluminatiPic\\IlluminatiComplete.jpg"));
 						Icon selectIcon = new ImageIcon(selectImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT));
 						displayImage.setIcon(selectIcon);
 					} catch (IOException e1) {
@@ -472,8 +471,6 @@ public class puzzle {
 				} else {
 					index = picSettings.getSelectedIndex(); // Specific image.
 				}
-				System.out.println(picSettings.getSelectedIndex());
-				System.out.println();
 				difficulty = shuffles; // Sets number of shuffles before the
 										// game starts.
 				difficultySet = true;
